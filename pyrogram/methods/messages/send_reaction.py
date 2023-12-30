@@ -107,4 +107,13 @@ class SendReaction:
             )
         else:
             raise ValueError("You need to pass one of message_id/story_id!")
-        return r
+        if isinstance(r, raw.types.UpdateMessageReactions):
+            peer_id = (
+                peer.user_id
+                if isinstance(peer, raw.types.InputPeerUser)
+                else pyrogram.utils.get_channel_id(peer.channel_id)
+            )
+            msg_id = r.msg_id
+            is_big = r.big
+            reaction = r.reaction
+            return Reaction(self, chat_id=peer_id, msg_id=msg_id, is_big=is_big, reaction=reaction)

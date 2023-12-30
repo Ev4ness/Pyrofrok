@@ -86,7 +86,7 @@ class Reaction(Object):
                 custom_emoji_id=reaction.document_id
             )
         
-        if isinstance(reaction, raw.functions.messages.SendReaction):
+        if isinstance(reaction, raw.types.UpdateMessageReactions):
             return Reaction(
                 client=client,
                 chat_id=chat_id,
