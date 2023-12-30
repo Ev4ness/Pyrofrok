@@ -52,7 +52,6 @@ class Reaction(Object):
         chosen_order: Optional[int] = None,
         chat_id: Optional[int] = None,
         msg_id: Optional[int] = None,
-        is_big: Optional[bool] = False,
         reaction: Optional[str] = None
     ):
         super().__init__(client)
@@ -63,7 +62,6 @@ class Reaction(Object):
         self.chosen_order = chosen_order
         self.chat_id = chat_id
         self.msg_id = msg_id
-        self.is_big = is_big
         self.reaction = reaction
 
     @staticmethod
@@ -72,7 +70,6 @@ class Reaction(Object):
         reaction: "raw.base.Reaction",
         chat_id,
         msg_id,
-        is_big,
     ) -> "Reaction":
         if isinstance(reaction, raw.types.ReactionEmoji):
             return Reaction(
@@ -91,7 +88,6 @@ class Reaction(Object):
                 client=client,
                 chat_id=chat_id,
                 msg_id=msg_id,
-                is_big=is_big,
                 reaction=reaction
             )
 

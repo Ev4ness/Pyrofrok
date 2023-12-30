@@ -114,6 +114,5 @@ class SendReaction:
                 else pyrogram.utils.get_channel_id(peer.channel_id)
             )
             msg_id = r.msg_id
-            is_big = r.big
             reaction = r.reaction
-            return Reaction(self, chat_id=peer_id, msg_id=msg_id, is_big=is_big, reaction=reaction)
+            return Reaction(self, chat_id=peer_id, msg_id=msg_id, reaction=reaction)
