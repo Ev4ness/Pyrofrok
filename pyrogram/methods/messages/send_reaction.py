@@ -117,4 +117,4 @@ class SendReaction:
             reaction = r.reaction
             return Reaction(self, chat_id=peer_id, msg_id=msg_id, reaction=reaction)
         else:
-            return r
+            return r.updates[1]
