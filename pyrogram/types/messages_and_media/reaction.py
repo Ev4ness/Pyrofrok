@@ -20,6 +20,7 @@ from typing import Optional
 
 import pyrogram
 from pyrogram import raw
+from pyrogram.session.internals import msg_id
 from ..object import Object
 
 
@@ -48,7 +49,11 @@ class Reaction(Object):
         emoji: Optional[str] = None,
         custom_emoji_id: Optional[int] = None,
         count: Optional[int] = None,
-        chosen_order: Optional[int] = None
+        chosen_order: Optional[int] = None,
+        chat_id: Optional[int] = None,
+        msg_id: Optional[int] = None,
+        is_big: Optional[bool] = False,
+        reaction: Optional[str] = None
     ):
         super().__init__(client)
 
@@ -56,11 +61,18 @@ class Reaction(Object):
         self.custom_emoji_id = custom_emoji_id
         self.count = count
         self.chosen_order = chosen_order
+        self.chat_id = chat_id
+        self.msg_id = msg_id
+        self.is_big = is_big
+        self.reaction = reaction
 
     @staticmethod
     def _parse(
         client: "pyrogram.Client",
-        reaction: "raw.base.Reaction"
+        reaction: "raw.base.Reaction",
+        chat_id,
+        msg_id,
+        is_big,
     ) -> "Reaction":
         if isinstance(reaction, raw.types.ReactionEmoji):
             return Reaction(
@@ -72,6 +84,15 @@ class Reaction(Object):
             return Reaction(
                 client=client,
                 custom_emoji_id=reaction.document_id
+            )
+        
+        if isinstance(reaction, raw.functions.messages.SendReaction):
+            return Reaction(
+                client=client,
+                chat_id=chat_id,
+                msg_id=msg_id,
+                is_big=is_big,
+                reaction=reaction
             )
 
     @staticmethod

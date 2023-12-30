@@ -16,10 +16,13 @@
 #  You should have received a copy of the GNU Lesser General Public License
 #  along with Pyrogram.  If not, see <http://www.gnu.org/licenses/>.
 
+from operator import is_
 from typing import Union, List
 
 import pyrogram
 from pyrogram import raw
+from pyrogram.session.internals import msg_id
+from pyrogram.types.messages_and_media.reaction import Reaction
 
 
 class SendReaction:
@@ -84,23 +87,33 @@ class SendReaction:
                 emoji = [raw.types.ReactionCustomEmoji(document_id=emoji)]
             else:
                 emoji = [raw.types.ReactionEmoji(emoticon=emoji)] if emoji else None
+        peer = await self.resolve_peer(chat_id)
         if message_id is not None:
-            await self.invoke(
+            r = await self.invoke(
                 raw.functions.messages.SendReaction(
-                    peer=await self.resolve_peer(chat_id),
+                    peer=peer,
                     msg_id=message_id,
                     reaction=emoji,
                     big=big
                 )
             )
         elif story_id is not None:
-            await self.invoke(
+            r = await self.invoke(
                 raw.functions.stories.SendReaction(
-                    peer=await self.resolve_peer(chat_id),
+                    peer=peer,
                     story_id=story_id,
                     reaction=raw.types.ReactionEmoji(emoticon=emoji) if emoji else None
                 )
             )
         else:
             raise ValueError("You need to pass one of message_id/story_id!")
-        return True
+        if isinstance(r, raw.functions.messages.SendReaction):
+            peer_id = (
+                peer.user_id
+                if isinstance(peer, raw.types.InputPeerUser)
+                else pyrogram.utils.get_channel_id(peer.channel_id)
+            )
+            msg_id = r.msg_id
+            is_big = r.big
+            reaction = r.reaction
+            return Reaction(self, chat_id=peer_id, msg_id=msg_id, is_big=is_big, reaction=reaction)
