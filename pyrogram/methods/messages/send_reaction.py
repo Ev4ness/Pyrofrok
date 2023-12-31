@@ -107,7 +107,7 @@ class SendReaction:
             )
         else:
             raise ValueError("You need to pass one of message_id/story_id!")
-        if isinstance(r, types.Updates):
+        if isinstance(r, raw.types.Updates):
             return bool(r)
         elif isinstance(r.updates[0], raw.types.UpdateMessageReactions):
             peer_id = (
