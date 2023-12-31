@@ -114,7 +114,7 @@ class SendReaction:
             return types.Message(
                 id=res.message.id,
                 chat=raw.types.Chat(
-                    id=res.peer_id.user_id,
+                    id=res.message.peer_id.user_id,
                     type=enums.ChatType.PRIVATE,
                     client=self
                 ),
