@@ -107,6 +107,7 @@ class SendReaction:
             )
         else:
             raise ValueError("You need to pass one of message_id/story_id!")
+        return r
         if isinstance(r, raw.types.Updates) and len(r.updates) == 0:
             return bool(r)
         elif isinstance(r.updates[0], raw.types.UpdateMessageReactions):
@@ -116,7 +117,7 @@ class SendReaction:
                 else pyrogram.utils.get_channel_id(peer.channel_id)
             )
             msg_id = r.updates[0].msg_id
-            reaction = r.updates[0].reaction
+            reaction = r.updates[0].reactions
             return Reaction(self, chat_id=peer_id, msg_id=msg_id, reaction=reaction)
         else:
             peer_id = (
@@ -125,5 +126,5 @@ class SendReaction:
                 else pyrogram.utils.get_channel_id(peer.channel_id)
             )
             msg_id = r.updates[1].msg_id
-            reaction = r.updates[1].reaction
+            reaction = r.updates[1].reactions
             return Reaction(self, chat_id=peer_id, msg_id=msg_id, reaction=reaction)
