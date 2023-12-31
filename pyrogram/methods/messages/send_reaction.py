@@ -123,7 +123,6 @@ class SendReaction:
                 outgoing=res.message.out,
                 reply_markup=res.message.reply_markup,
                 reactions=res.message.reactions,
-                entities=res.message.entities,
                 client=self
             )
         elif isinstance(r.updates[0], raw.types.UpdateMessageReactions):
