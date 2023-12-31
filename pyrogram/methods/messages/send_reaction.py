@@ -110,21 +110,7 @@ class SendReaction:
         if isinstance(r, raw.types.Updates) and len(r.updates) == 0:
             return bool(r)
         elif isinstance(r.updates[0], raw.types.UpdateEditMessage):
-            res = r.updates[0]
-            return types.Message(
-                id=res.message.id,
-                chat=types.Chat(
-                    id=res.message.peer_id.user_id,
-                    type=enums.ChatType.PRIVATE,
-                    client=self
-                ),
-                text=res.message.message,
-                date=utils.timestamp_to_datetime(res.message.date),
-                outgoing=res.message.out,
-                reply_markup=res.message.reply_markup,
-                reactions=res.message.reactions,
-                client=self
-            )
+            return r.updates[0]
         elif isinstance(r.updates[0], raw.types.UpdateMessageReactions):
             peer_id = (
                 peer.user_id
@@ -133,7 +119,7 @@ class SendReaction:
             )
             msg_id = r.updates[0].msg_id
             reaction = r.updates[0].reactions
-            return Reaction(self, chat_id=peer_id, msg_id=msg_id, reaction=reaction)
+            return r.updates[0]
         else:
             peer_id = (
                 peer.user_id
@@ -142,4 +128,4 @@ class SendReaction:
             )
             msg_id = r.updates[1].msg_id
             reaction = r.updates[1].reactions
-            return Reaction(self, chat_id=peer_id, msg_id=msg_id, reaction=reaction)
+            return r.updates[1]
