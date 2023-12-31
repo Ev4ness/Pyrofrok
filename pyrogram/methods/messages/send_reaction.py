@@ -113,7 +113,7 @@ class SendReaction:
             res = r.updates[0]
             return types.Message(
                 id=res.message.id,
-                chat=raw.types.Chat(
+                chat=types.Chat(
                     id=res.message.peer_id.user_id,
                     type=enums.ChatType.PRIVATE,
                     client=self
