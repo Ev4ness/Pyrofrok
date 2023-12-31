@@ -20,7 +20,7 @@ from operator import is_
 from typing import Union, List
 
 import pyrogram
-from pyrogram import enums, raw, utils
+from pyrogram import enums, raw, types, utils
 from pyrogram.session.internals import msg_id
 from pyrogram.types.messages_and_media.reaction import Reaction
 
@@ -111,7 +111,7 @@ class SendReaction:
             return bool(r)
         if isinstance(r.updates[0], raw.types.UpdateEditMessage):
             res = r.updates[0]
-            return raw.types.Message(
+            return types.Message(
                 id=res.message.id,
                 chat=raw.types.Chat(
                     id=res.peer_id.user_id,
