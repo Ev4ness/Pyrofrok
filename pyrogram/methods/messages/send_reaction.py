@@ -20,7 +20,7 @@ from operator import is_
 from typing import Union, List
 
 import pyrogram
-from pyrogram import raw, utils
+from pyrogram import enums, raw, utils
 from pyrogram.session.internals import msg_id
 from pyrogram.types.messages_and_media.reaction import Reaction
 
@@ -106,15 +106,14 @@ class SendReaction:
                 )
             )
         else:
-            raise ValueError("You need to pass one of message_id/story_id!")
-        return r
+            raise ValueError("You need to pass one of message_id/story_id!"
         if isinstance(r, raw.types.Updates) and len(r.updates) == 0:
             return bool(r)
         if isinstance(r.updates[0], raw.types.UpdateEditMessage):
             res = r.updates[0]
             return raw.types.Message(
                 id=res.message.id,
-                chat=types.Chat(
+                chat=raw.types.Chat(
                     id=res.peer_id.user_id,
                     type=enums.ChatType.PRIVATE,
                     client=self
