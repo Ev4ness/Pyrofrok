@@ -68,8 +68,8 @@ class Reaction(Object):
     def _parse(
         client: "pyrogram.Client",
         reaction: "raw.base.Reaction",
-        chat_id,
-        msg_id,
+        chat_id: int = None,
+        msg_id: int = None,
     ) -> "Reaction":
         if isinstance(reaction, raw.types.ReactionEmoji):
             return Reaction(
