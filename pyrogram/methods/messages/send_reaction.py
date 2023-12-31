@@ -122,7 +122,7 @@ class SendReaction:
                 date=utils.timestamp_to_datetime(res.message.date),
                 outgoing=res.message.out,
                 reply_markup=res.message.reply_markup,
-                reaction=res.message.reactions,
+                reactions=res.message.reactions,
                 entities=res.message.entities,
                 client=self
             )
