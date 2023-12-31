@@ -109,7 +109,7 @@ class SendReaction:
             raise ValueError("You need to pass one of message_id/story_id!"
         if isinstance(r, raw.types.Updates) and len(r.updates) == 0:
             return bool(r)
-        if isinstance(r.updates[0], raw.types.UpdateEditMessage):
+        elif isinstance(r.updates[0], raw.types.UpdateEditMessage):
             res = r.updates[0]
             return types.Message(
                 id=res.message.id,
