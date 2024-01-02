@@ -4360,7 +4360,11 @@ class Message(Object, Update):
         else:
             await self.reply(button, quote=quote)
 
-    async def react(self, emoji: str = "", big: bool = False) -> bool:
+      async def react(
+        self,
+        reaction: List["types.ReactionType"] = [],
+        is_big: bool = False
+    ) -> "types.MessageReactions":
         """Bound method *react* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -4370,7 +4374,7 @@ class Message(Object, Update):
             await client.send_reaction(
                 chat_id=chat_id,
                 message_id=message.id,
-                emoji="🔥"
+                reaction=[ReactionTypeEmoji(emoji="👍")]
             )
 
         Example:
@@ -4379,16 +4383,15 @@ class Message(Object, Update):
                 await message.react(emoji="🔥")
 
         Parameters:
-            emoji (``str``, *optional*):
-                Reaction emoji.
-                Pass "" as emoji (default) to retract the reaction.
-             
-            big (``bool``, *optional*):
-                Pass True to show a bigger and longer reaction.
+            reaction (List of :obj:`~pyrogram.types.ReactionType` *optional*):
+                New list of reaction types to set on the message.
+                Pass None as emoji (default) to retract the reaction.
+            is_big (``bool``, *optional*):
+                Pass True to set the reaction with a big animation.
                 Defaults to False.
 
         Returns:
-            ``bool``: On success, True is returned.
+            :obj: `~pyrogram.types.MessageReactions`: On success, True is returned.
 
         Raises:
             RPCError: In case of a Telegram RPC error.
@@ -4397,8 +4400,8 @@ class Message(Object, Update):
         return await self._client.send_reaction(
             chat_id=self.chat.id,
             message_id=self.id,
-            emoji=emoji,
-            big=big
+            reaction=reaction,
+            is_big=is_big
         )
 
     async def retract_vote(
