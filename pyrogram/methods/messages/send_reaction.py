@@ -92,9 +92,9 @@ class SendReaction:
             ] if emoji else None
         else:
             if isinstance(emoji, int):
-                reaction = raw.types.ReactionCustomEmoji(document_id=emoji)
+                reaction = [raw.types.ReactionCustomEmoji(document_id=emoji)]
             else:
-                reaction = raw.types.ReactionEmoji(emoticon=emoji) if emoji else None
+                reaction = [raw.types.ReactionEmoji(emoticon=emoji)] if emoji else None
         if message_id is not None:
             r = await self.invoke(
                 raw.functions.messages.SendReaction(
