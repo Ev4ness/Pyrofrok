@@ -111,7 +111,7 @@ class SendReaction:
                 raw.functions.stories.SendReaction(
                     peer=await self.resolve_peer(chat_id),
                     story_id=story_id,
-                    reaction=raw.types.ReactionEmoji(emoticon=emoji) if emoji else None
+                    reaction=raw.types.ReactionEmoji(emoticon=emoji) if emoji else None,
                     add_to_recent=add_to_recent
                 )
             )
