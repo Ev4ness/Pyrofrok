@@ -36,10 +36,6 @@ class MessageReactionUpdated(Object, Update):
         id (``int``):
             Unique identifier of the message inside the chat
             
-         message_thread_id (``int``, *optional*):
-            Unique identifier of a message thread to which the message belongs.
-            for supergroups only
-            
         chat (:obj:`~pyrogram.types.Chat`):
             The chat containing the message the user reacted to
 
@@ -65,7 +61,6 @@ class MessageReactionUpdated(Object, Update):
         *,
         client: "pyrogram.Client" = None,
         id: int,
-        message_thread_id: int = None,
         chat: "types.Chat",
         from_user: "types.User",
         actor_chat: "types.Chat",
@@ -77,7 +72,6 @@ class MessageReactionUpdated(Object, Update):
 
         self.chat = chat
         self.id = id
-        self.message_thread_id = message_thread_id
         self.from_user = from_user
         self.actor_chat = actor_chat
         self.date = date
@@ -91,14 +85,13 @@ class MessageReactionUpdated(Object, Update):
         users: Dict[int, "raw.types.User"],
         chats: Dict[int, "raw.types.Chat"]
     ) -> "MessageReactionUpdated":
-        logging.info(update)
         chat = None
         peer_id = utils.get_peer_id(update.peer)
         raw_peer_id = utils.get_raw_peer_id(update.peer)
         if peer_id > 0:
             chat = types.Chat._parse_user_chat(client, users[raw_peer_id])
         else:
-            chat = types.Chat._parse_chat_chat(client, chats[raw_peer_id])
+            chat = types.Chat._parse_channel_chat(client, chats[raw_peer_id])
 
         from_user = None
         actor_chat = None
@@ -114,7 +107,6 @@ class MessageReactionUpdated(Object, Update):
         return MessageReactionUpdated(
             client=client,
             id=update.msg_id,
-            message_thread_id=0,
             from_user=from_user,
             date=utils.timestamp_to_datetime(update.date),
             chat=chat,
