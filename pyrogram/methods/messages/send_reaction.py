@@ -29,7 +29,7 @@ class SendReaction:
         chat_id: Union[int, str],
         message_id: int = None,
         story_id: int = None,
-        reaction: Union[List["types.ReactionType"], "types.ReactionType"] = [],
+        emoji: Union[int, str, List[Union[int, str]]] = None,
         is_big: bool = False,
         add_to_recent: bool = True
     ) -> "types.MessageReactions":
@@ -51,9 +51,10 @@ class SendReaction:
             story_id (``int``, *optional*):
                 Identifier of the story.
 
-            reaction (List of :obj:`~pyrogram.types.ReactionType` *optional*):
-                New list of reaction types to set on the message.
+            emoji (``int`` | ``str`` | List of ``int`` | ``str``, *optional*):
+                Reaction emoji.
                 Pass None as emoji (default) to retract the reaction.
+                Pass list of int or str to react multiple emojis.
 
             is_big (``bool``, *optional*):
                 Pass True to set the reaction with a big animation.
@@ -69,31 +70,35 @@ class SendReaction:
         Example:
             .. code-block:: python
 
-                from pyrogram.types import ReactionTypeEmoji
-                from pyrogram.raw.types import ReactionEmoji
-                
-                # Send a reaction one reaction
-                await app.send_reaction(chat_id, message_id=message_id, reaction=[ReactionTypeEmoji(emoji="🔥")])
-                
-                # Send story reaction
-                await app.send_reaction(chat_id, story_id=story_id, reaction=ReactionEmoji(emoji="🔥"))
+                # Send a reaction
+                await app.send_reaction(chat_id, message_id=message_id, emoji="🔥")
+                await app.send_reaction(chat_id, story_id=story_id, emoji="🔥")
 
-                # Send multiple reaction as a premium user
-                await app.send_reaction(chat_id, message_id=message_id, reaction=[ReactionTypeEmoji(emoji="👍"),ReactionTypeEmoji(emoji="😍")],True)
+                # Send a multiple reactions
+                await app.send_reaction(chat_id, message_id=message_id, emoji=["🔥", "❤️"])
 
                 # Retract a reaction
                 await app.send_reaction(chat_id, message_id=message_id)
                 await app.send_reaction(chat_id, story_id=story_id)
         """
+        if isinstance(emoji, list):
+            emoji = [
+                    raw.types.ReactionCustomEmoji(document_id=i)
+                    if isinstance(i, int)
+                    else raw.types.ReactionEmoji(emoticon=i)
+                    for i in emoji
+            ] if emoji else None
+        else:
+            if isinstance(emoji, int):
+                emoji = [raw.types.ReactionCustomEmoji(document_id=emoji)]
+            else:
+                emoji = [raw.types.ReactionEmoji(emoticon=emoji)] if emoji else None
         if message_id is not None:
             r = await self.invoke(
                 raw.functions.messages.SendReaction(
                     peer=await self.resolve_peer(chat_id),
                     msg_id=message_id,
-                    reaction=[
-                        r.write(self)
-                        for r in reaction
-                    ] if reaction else [raw.types.ReactionEmpty()],
+                    reaction=emoji,
                     big=is_big,
                     add_to_recent=add_to_recent
                 )
@@ -106,7 +111,7 @@ class SendReaction:
                 raw.functions.stories.SendReaction(
                     peer=await self.resolve_peer(chat_id),
                     story_id=story_id,
-                    reaction=reaction if reaction else None,
+                    reaction=raw.types.ReactionEmoji(emoticon=emoji) if emoji else None
                     add_to_recent=add_to_recent
                 )
             )
