@@ -106,7 +106,7 @@ class SendReaction:
                 raw.functions.stories.SendReaction(
                     peer=await self.resolve_peer(chat_id),
                     story_id=story_id,
-                    reaction=reaction if reaction else [raw.types.ReactionEmpty()],
+                    reaction=reaction if reaction else None,
                     add_to_recent=add_to_recent
                 )
             )
