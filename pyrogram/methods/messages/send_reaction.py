@@ -102,7 +102,7 @@ class SendReaction:
               if isinstance(i, raw.types.UpdateMessageReactions):
                   return types.MessageReactions._parse(self, i.reactions)
         elif story_id is not None:
-            r = await self.invoke(
+            await self.invoke(
                 raw.functions.stories.SendReaction(
                     peer=await self.resolve_peer(chat_id),
                     story_id=story_id,
@@ -110,6 +110,6 @@ class SendReaction:
                     add_to_recent=add_to_recent
                 )
             )
-            return r
+            return True
         else:
             raise ValueError("You need to pass one of message_id!")
