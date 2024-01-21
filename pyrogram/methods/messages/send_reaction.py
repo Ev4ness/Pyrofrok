@@ -20,7 +20,7 @@
 from typing import Union, List
 
 import pyrogram
-from pyrogram import raw, types
+from pyrogram import raw
 
 
 class SendReaction:
@@ -44,8 +44,9 @@ class SendReaction:
         Parameters:
             chat_id (``int`` | ``str``):
                 Unique identifier (int) or username (str) of the target chat.
+                You can also use chat public link in form of *t.me/<username>* (str).
 
-            message_id (``int``):
+            message_id (``int``, *optional*):
                 Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.
 
             story_id (``int``, *optional*):
@@ -58,6 +59,7 @@ class SendReaction:
 
             big (``bool``, *optional*):
                 Pass True to set the reaction with a big animation.
+                For message reactions only.
                 Defaults to False.
                 
             add_to_recent (``bool``, *optional*):
