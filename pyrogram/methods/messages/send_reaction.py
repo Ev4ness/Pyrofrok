@@ -31,9 +31,9 @@ class SendReaction:
         story_id: int = None,
         emoji: Union[int, str, List[Union[int, str]]] = None,
         big: bool = False,
-        add_to_recent: bool = True
+        add_to_recent: bool = False
     ) -> "types.MessageReactions":
-        """Use this method to change the chosen reactions on a message.
+        """Use this method to send reactions on a message/stories.
         Service messages can't be reacted to.
         Automatically forwarded messages from
         a channel to its discussion group have the
