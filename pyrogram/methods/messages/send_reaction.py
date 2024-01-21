@@ -112,6 +112,6 @@ class SendReaction:
             )
             for i in r.updates:
               if isinstance(i, raw.types.UpdateSentStoryReaction):
-                  return types.MessageReactions._parse(self, i.reactions)     
+                  return types.MessageReactions._parse(self, i.reaction)     
         else:
             raise ValueError("You need to pass one of message_id!")
