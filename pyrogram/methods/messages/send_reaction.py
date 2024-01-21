@@ -29,7 +29,7 @@ class SendReaction:
         chat_id: Union[int, str],
         message_id: int = None,
         story_id: int = None,
-        reaction: Union(List["types.ReactionType"], "types.ReactionType") = [],
+        reaction: Union[List["types.ReactionType"], "types.ReactionType"] = [],
         is_big: bool = False,
         add_to_recent: bool = True
     ) -> "types.MessageReactions":
