@@ -69,13 +69,13 @@ class SendReaction:
         Example:
             .. code-block:: python
 
-                from pyrogram.types import ReactionTypeEmoji
+                from pyrogram.types import ReactionTypeEmoji, ReactionEmoji
                 
                 # Send a reaction one reaction
                 await app.send_reaction(chat_id, message_id=message_id, reaction=[ReactionTypeEmoji(emoji="🔥")])
                 
                 # Send story reaction
-                await app.send_reaction(chat_id, story_id=story_id, reaction=ReactionTypeEmoji(emoji="🔥"))
+                await app.send_reaction(chat_id, story_id=story_id, reaction=ReactionEmoji(emoji="🔥"))
 
                 # Send multiple reaction as a premium user
                 await app.send_reaction(chat_id, message_id=message_id, reaction=[ReactionTypeEmoji(emoji="👍"),ReactionTypeEmoji(emoji="😍")],True)
