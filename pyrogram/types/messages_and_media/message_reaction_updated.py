@@ -61,20 +61,20 @@ class MessageReactionUpdated(Object, Update):
         *,
         client: "pyrogram.Client" = None,
         id: int,
-        chat: "types.Chat",
         from_user: "types.User",
         actor_chat: "types.Chat",
         date: datetime,
+        chat: "types.Chat",
         old_reaction: List["types.ReactionType"],
         new_reaction: List["types.ReactionType"]
     ):
         super().__init__(client)
 
-        self.chat = chat
         self.id = id
         self.from_user = from_user
         self.actor_chat = actor_chat
         self.date = date
+        self.chat = chat
         self.old_reaction = old_reaction
         self.new_reaction = new_reaction
 
