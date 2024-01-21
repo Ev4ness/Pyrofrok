@@ -4374,13 +4374,13 @@ class Message(Object, Update):
             await client.send_reaction(
                 chat_id=chat_id,
                 message_id=message.id,
-                reaction=[ReactionTypeEmoji(emoji="👍")]
+                reaction=[ReactionTypeEmoji(emoji="🔥")]
             )
 
         Example:
             .. code-block:: python
 
-                await message.react(emoji="🔥")
+                await message.react(reaction=[ReactionTypeEmoji(emoji="🔥")])
 
         Parameters:
             reaction (List of :obj:`~pyrogram.types.ReactionType` *optional*):
