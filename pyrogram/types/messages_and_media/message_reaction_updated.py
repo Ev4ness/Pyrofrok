@@ -33,13 +33,17 @@ class MessageReactionUpdated(Object, Update):
     These updates are heavy and their changes may be delayed by a few minutes.
 
     Parameters:
+        id (``int``):
+            Unique identifier of the message inside the chat
+            
+         message_thread_id (``int``, *optional*):
+            Unique identifier of a message thread to which the message belongs.
+            for supergroups only
+            
         chat (:obj:`~pyrogram.types.Chat`):
             The chat containing the message the user reacted to
 
-        message_id (``int``):
-            Unique identifier of the message inside the chat
-
-        user (:obj:`~pyrogram.types.User`, *optional*):
+        from_user (:obj:`~pyrogram.types.User`, *optional*):
             The user that changed the reaction, if the user isn't anonymous
 
         actor_chat (:obj:`~pyrogram.types.Chat`, *optional*):
@@ -60,9 +64,10 @@ class MessageReactionUpdated(Object, Update):
         self,
         *,
         client: "pyrogram.Client" = None,
+        id: int,
+        message_thread_id: int = None,
         chat: "types.Chat",
-        message_id: int,
-        user: "types.User",
+        from_user: "types.User",
         actor_chat: "types.Chat",
         date: datetime,
         old_reaction: List["types.ReactionType"],
@@ -71,8 +76,9 @@ class MessageReactionUpdated(Object, Update):
         super().__init__(client)
 
         self.chat = chat
-        self.message_id = message_id
-        self.user = user
+        self.id = id
+        self.message_thread_id = message_thread_id
+        self.from_user = from_user
         self.actor_chat = actor_chat
         self.date = date
         self.old_reaction = old_reaction
@@ -93,24 +99,25 @@ class MessageReactionUpdated(Object, Update):
         else:
             chat = types.Chat._parse_chat_chat(client, chats[raw_peer_id])
 
-        user = None
+        from_user = None
         actor_chat = None
 
         raw_actor_peer_id = utils.get_raw_peer_id(update.actor)
         actor_peer_id = utils.get_peer_id(update.actor)
 
         if actor_peer_id > 0:
-            user = types.User._parse(client, users[raw_actor_peer_id])
+            from_user = types.User._parse(client, users[raw_actor_peer_id])
         else:
             actor_chat = types.Chat._parse_channel_chat(client, chats[raw_actor_peer_id])
 
         return MessageReactionUpdated(
             client=client,
-            chat=chat,
-            message_id=update.msg_id,
-            user=user,
-            actor_chat=actor_chat,
+            id=update.msg_id,
+            message_thread_id=update,
+            from_user=from_user,
             date=utils.timestamp_to_datetime(update.date),
+            chat=chat,
+            actor_chat=actor_chat,
             old_reaction=[
                 types.ReactionType._parse(
                     client,
