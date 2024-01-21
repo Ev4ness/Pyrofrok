@@ -20,7 +20,7 @@
 from typing import Union, List
 
 import pyrogram
-from pyrogram import raw
+from pyrogram import raw, types
 
 
 class SendReaction:
@@ -92,9 +92,9 @@ class SendReaction:
             ] if emoji else None
         else:
             if isinstance(emoji, int):
-                emoji = [raw.types.ReactionCustomEmoji(document_id=emoji)]
+                emoji = raw.types.ReactionCustomEmoji(document_id=emoji)
             else:
-                emoji = [raw.types.ReactionEmoji(emoticon=emoji)] if emoji else None
+                emoji = raw.types.ReactionEmoji(emoticon=emoji) if emoji else None
         if message_id is not None:
             r = await self.invoke(
                 raw.functions.messages.SendReaction(
