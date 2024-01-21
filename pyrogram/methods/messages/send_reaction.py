@@ -29,8 +29,9 @@ class SendReaction:
         chat_id: Union[int, str],
         message_id: int = None,
         story_id: int = None,
-        reaction: List["types.ReactionType"] = [],
-        is_big: bool = False
+        reaction: Union(List["types.ReactionType"], "types.ReactionType" = [],
+        is_big: bool = False,
+        add_to_recent: bool = True
     ) -> "types.MessageReactions":
         """Use this method to change the chosen reactions on a message.
         Service messages can't be reacted to.
@@ -57,6 +58,10 @@ class SendReaction:
             is_big (``bool``, *optional*):
                 Pass True to set the reaction with a big animation.
                 Defaults to False.
+                
+            add_to_recent (``bool``, *optional*):
+                Pass True if the reaction should appear in the recently used reactions.
+                This option is applicable only for users.
 
         Returns:
             :obj: `~pyrogram.types.MessageReactions`: On success, True is returned.
@@ -66,9 +71,11 @@ class SendReaction:
 
                 from pyrogram.types import ReactionTypeEmoji
                 
-                # Send a reaction as a bot
+                # Send a reaction one reaction
                 await app.send_reaction(chat_id, message_id=message_id, reaction=[ReactionTypeEmoji(emoji="🔥")])
-                await app.send_reaction(chat_id, story_id=story_id, reaction=[ReactionTypeEmoji(emoji="🔥")])
+                
+                # Send story reaction
+                await app.send_reaction(chat_id, story_id=story_id, reaction=ReactionTypeEmoji(emoji="🔥"))
 
                 # Send multiple reaction as a premium user
                 await app.send_reaction(chat_id, message_id=message_id, reaction=[ReactionTypeEmoji(emoji="👍"),ReactionTypeEmoji(emoji="😍")],True)
@@ -86,7 +93,8 @@ class SendReaction:
                         r.write(self)
                         for r in reaction
                     ] if reaction else [raw.types.ReactionEmpty()],
-                    big=is_big
+                    big=is_big,
+                    add_to_recent=add_to_recent
                 )
             )
             for i in r.updates:
@@ -97,10 +105,8 @@ class SendReaction:
                 raw.functions.stories.SendReaction(
                     peer=await self.resolve_peer(chat_id),
                     story_id=story_id,
-                    reaction=[
-                        r.write(self)
-                        for r in reaction
-                    ] if reaction else [raw.types.ReactionEmpty()],
+                    reaction=reaction if reaction else [raw.types.ReactionEmpty()],
+                    add_to_recent=add_to_recent
                 )
             )
             for i in r.updates:
