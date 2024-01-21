@@ -30,7 +30,7 @@ class SendReaction:
         message_id: int = None,
         story_id: int = None,
         emoji: Union[int, str, List[Union[int, str]]] = None,
-        is_big: bool = False,
+        big: bool = False,
         add_to_recent: bool = True
     ) -> "types.MessageReactions":
         """Use this method to change the chosen reactions on a message.
@@ -56,7 +56,7 @@ class SendReaction:
                 Pass None as emoji (default) to retract the reaction.
                 Pass list of int or str to react multiple emojis.
 
-            is_big (``bool``, *optional*):
+            big (``bool``, *optional*):
                 Pass True to set the reaction with a big animation.
                 Defaults to False.
                 
@@ -99,7 +99,7 @@ class SendReaction:
                     peer=await self.resolve_peer(chat_id),
                     msg_id=message_id,
                     reaction=emoji,
-                    big=is_big,
+                    big=big,
                     add_to_recent=add_to_recent
                 )
             )

@@ -4360,11 +4360,7 @@ class Message(Object, Update):
         else:
             await self.reply(button, quote=quote)
 
-    async def react(
-        self,
-        reaction: List["types.ReactionType"] = [],
-        is_big: bool = False
-    ) -> "types.MessageReactions":
+    async def react(self, emoji: str = "", big: bool = False) -> bool:
         """Bound method *react* of :obj:`~pyrogram.types.Message`.
 
         Use as a shortcut for:
@@ -4374,20 +4370,21 @@ class Message(Object, Update):
             await client.send_reaction(
                 chat_id=chat_id,
                 message_id=message.id,
-                reaction=[ReactionTypeEmoji(emoji="🔥")]
+                emoji="🔥"
             )
 
         Example:
             .. code-block:: python
 
-                await message.react(reaction=[ReactionTypeEmoji(emoji="🔥")])
+                await message.react(emoji="🔥")
 
         Parameters:
-            reaction (List of :obj:`~pyrogram.types.ReactionType` *optional*):
-                New list of reaction types to set on the message.
-                Pass None as emoji (default) to retract the reaction.
-            is_big (``bool``, *optional*):
-                Pass True to set the reaction with a big animation.
+            emoji (``str``, *optional*):
+                Reaction emoji.
+                Pass "" as emoji (default) to retract the reaction.
+             
+            big (``bool``, *optional*):
+                Pass True to show a bigger and longer reaction.
                 Defaults to False.
 
         Returns:
@@ -4400,8 +4397,8 @@ class Message(Object, Update):
         return await self._client.send_reaction(
             chat_id=self.chat.id,
             message_id=self.id,
-            reaction=reaction,
-            is_big=is_big
+            emoji=emoji,
+            big=big
         )
 
     async def retract_vote(
