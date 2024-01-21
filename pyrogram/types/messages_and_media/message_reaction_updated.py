@@ -19,7 +19,7 @@
 from datetime import datetime
 from typing import Optional, Dict, List
 
-import pyrogram
+import pyrogram, logging
 from pyrogram import raw, types, utils
 from ..object import Object
 from ..update import Update
@@ -91,6 +91,7 @@ class MessageReactionUpdated(Object, Update):
         users: Dict[int, "raw.types.User"],
         chats: Dict[int, "raw.types.Chat"]
     ) -> "MessageReactionUpdated":
+        logging.info(update)
         chat = None
         peer_id = utils.get_peer_id(update.peer)
         raw_peer_id = utils.get_raw_peer_id(update.peer)
@@ -113,7 +114,7 @@ class MessageReactionUpdated(Object, Update):
         return MessageReactionUpdated(
             client=client,
             id=update.msg_id,
-            message_thread_id=update,
+            message_thread_id=0,
             from_user=from_user,
             date=utils.timestamp_to_datetime(update.date),
             chat=chat,
