@@ -84,7 +84,7 @@ class SendReaction:
                 await app.send_reaction(chat_id, story_id=story_id)
         """
         if isinstance(emoji, list):
-            emoji = [
+            reaction = [
                     raw.types.ReactionCustomEmoji(document_id=i)
                     if isinstance(i, int)
                     else raw.types.ReactionEmoji(emoticon=i)
@@ -92,15 +92,15 @@ class SendReaction:
             ] if emoji else None
         else:
             if isinstance(emoji, int):
-                emoji = raw.types.ReactionCustomEmoji(document_id=emoji)
+                reaction = raw.types.ReactionCustomEmoji(document_id=emoji)
             else:
-                emoji = raw.types.ReactionEmoji(emoticon=emoji) if emoji else None
+                reaction = raw.types.ReactionEmoji(emoticon=emoji) if emoji else None
         if message_id is not None:
             r = await self.invoke(
                 raw.functions.messages.SendReaction(
                     peer=await self.resolve_peer(chat_id),
                     msg_id=message_id,
-                    reaction=emoji,
+                    reaction=reaction,
                     big=big,
                     add_to_recent=add_to_recent
                 )
