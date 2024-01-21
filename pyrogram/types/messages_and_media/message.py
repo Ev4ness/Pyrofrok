@@ -4360,7 +4360,7 @@ class Message(Object, Update):
         else:
             await self.reply(button, quote=quote)
 
-      async def react(
+    async def react(
         self,
         reaction: List["types.ReactionType"] = [],
         is_big: bool = False
