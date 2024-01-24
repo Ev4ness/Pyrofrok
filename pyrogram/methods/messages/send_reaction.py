@@ -106,7 +106,7 @@ class SendReaction:
                 )
             )
             for i in r.updates:
-              if isinstance(i, raw.types.UpdateMessageReactions):
+              if isinstance(i, raw.types.UpdateMessageReactions) or isinstance(i, raw.types.UpdateEditMessage):
                   return types.MessageReactions._parse(self, i.reactions)
         elif story_id is not None:
             await self.invoke(
