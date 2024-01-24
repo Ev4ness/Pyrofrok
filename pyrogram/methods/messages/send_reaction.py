@@ -105,9 +105,10 @@ class SendReaction:
                     add_to_recent=add_to_recent
                 )
             )
-            return r
             for i in r.updates:
-              if isinstance(i, raw.types.UpdateMessageReactions) or isinstance(i, raw.types.UpdateEditMessage):
+              if isinstance(i, raw.types.UpdateEditMessage):
+                  return types.MessageReactions._parse(self, i.reactions)
+              if isinstance(i, raw.types.UpdateMessageReactions):
                   return types.MessageReactions._parse(self, i.reactions)
         elif story_id is not None:
             await self.invoke(
